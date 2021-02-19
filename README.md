@@ -18,7 +18,7 @@ yarn add vue-monaco-singleline
 
 - [Simple](https://codesandbox.io/s/vue-monaco-singleline-simple-9tkul?file=/src/App.vue)
 - [Change Height, Width, FontSize](https://codesandbox.io/s/vue-monaco-singleline-change-style-mnwix?file=/src/App.vue)
-- TODO: [Custom Language and Theme]()
+- [Custom Language and Theme](https://vikyd.github.io/vue-monaco-singleline-custom-language/)
 
 # Using inside Vue Component
 
