@@ -1,6 +1,6 @@
 {
   "name": "vue-monaco-singleline",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Single Line Mode Monaco Editor for Vue.",
   "scripts": {
     "serve": "vue-cli-service serve",
