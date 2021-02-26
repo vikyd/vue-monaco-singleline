@@ -25,6 +25,11 @@
       :height="70"
       class="my-editor3"
     />
+    <monaco-singleline
+      value="readOnly mode, will hide edit cursor"
+      placeholder="this is placeholder"
+      readOnly
+    />
   </div>
 </template>
 

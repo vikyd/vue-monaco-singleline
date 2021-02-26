@@ -74,7 +74,7 @@ If using [Vue CLI], can add to `vue.config.js`:
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 module.exports = {
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
       {
         // Languages are loaded on demand at runtime
@@ -93,7 +93,7 @@ If also want Javascript autocompletion, add `typescript` to `languages`, because
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 module.exports = {
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
       {
         // Languages are loaded on demand at runtime
@@ -188,6 +188,17 @@ You may need some art to fine tuning the best you like.
 Q: Why not auto ?
 
 A: monaco editor will fit to parent element size, not parent fit to monaco editor.
+
+# ReadOnly mode
+
+```vue
+<monaco-singleline readOnly />
+```
+
+Will:
+
+- disable editing
+- hide edit cursor
 
 # Development
 

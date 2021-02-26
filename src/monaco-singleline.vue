@@ -2,7 +2,7 @@
   <div class="monaco-singleline">
     <!-- v-show="!showPlaceholder" -->
     <monaco-editor
-      v-model="lineLocal"
+      v-model="valueLocal"
       v-bind="$attrs"
       language="mySpecialLanguage"
       theme="myCoolTheme"
@@ -11,7 +11,10 @@
       :options="opts"
       :editorBeforeMount="onEditorBeforeMount"
       :editorMounted="onEditorMounted"
-      :class="[showPlaceholder ? 'editor-with-placeholder' : '']"
+      :class="[
+        showPlaceholder ? 'editor-with-placeholder' : '',
+        readOnly ? 'editor-with-read-only' : '',
+      ]"
     />
     <div
       v-show="showPlaceholder"
@@ -89,12 +92,13 @@ export default {
     MonacoEditor,
   },
   model: {
-    prop: 'line',
+    prop: 'value',
     event: 'change',
   },
   props: {
-    line: { type: [String, Number], default: '' },
+    value: { type: [String, Number], default: '' },
     placeholder: { type: [String, Number], default: '' },
+    readOnly: { type: Boolean, default: false },
 
     height: { type: [String, Number], default: '21' },
 
@@ -116,20 +120,21 @@ export default {
     }
   },
   computed: {
-    lineLocal: {
+    valueLocal: {
       get() {
-        return this.line
+        return this.value
       },
       set(value) {
         this.$emit('change', value)
       },
     },
     showPlaceholder() {
-      return !this.diffEditor && !Boolean(`${this.lineLocal}`)
+      return !this.diffEditor && !Boolean(`${this.valueLocal}`)
     },
     opts() {
       return {
         ...DefaultOptions,
+        ...{ readOnly: this.readOnly },
         ...this.options,
       }
     },
@@ -220,6 +225,12 @@ export default {
   &:hover {
     border-color: #000;
   }
+
+  ::v-deep {
+    .decorationsOverviewRuler {
+      display: none;
+    }
+  }
 }
 
 .placeholder {
@@ -242,6 +253,16 @@ export default {
 .editor-with-placeholder {
   ::v-deep .view-lines {
     opacity: 0;
+  }
+}
+
+.editor-with-read-only {
+  ::v-deep {
+    .cursors-layer > .cursor {
+      // display: none !important;
+      // no use of `!important`, easy for user to modify style
+      opacity: 0;
+    }
   }
 }
 </style>
