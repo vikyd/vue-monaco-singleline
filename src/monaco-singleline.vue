@@ -87,7 +87,7 @@ const DefaultOptions = {
 function noop() {}
 
 export default {
-  name: 'monaco-singleine',
+  name: 'monaco-singleline',
   components: {
     MonacoEditor,
   },
@@ -112,6 +112,7 @@ export default {
     },
     editorMounted: { type: Function, default: noop },
     editorBeforeMount: { type: Function, default: noop },
+    onEnter: { type: Function, default: noop },
   },
   data() {
     return {
@@ -156,25 +157,29 @@ export default {
 
       // disable press `Enter` in case of producing line breaks
       editor.addCommand(monaco.KeyCode.Enter, () => {
-        /**
-         * Origin purpose: disable line breaks
-         * Side Effect: If defining completions, will prevent `Enter` confirm selection
-         * Side Effect Solution: always accept selected suggestion when `Enter`
-         *
-         * But it is hard to find out the name `acceptSelectedSuggestion` to trigger.
-         *
-         * Where to find the `acceptSelectedSuggestion` at monaco official documents ?
-         * Below is some refs:
-         * - https://stackoverflow.com/questions/64430041/get-a-list-of-monaco-commands-actions-ids
-         * - command from: https://github.com/microsoft/vscode/blob/e216a598d3e02401f26459fb63a4f1b6365ec4ec/src/vs/editor/contrib/suggest/suggestController.ts#L632-L638
-         * - https://github.com/microsoft/vscode/search?q=registerEditorCommand
-         * - real list: https://github.com/microsoft/vscode/blob/e216a598d3e02401f26459fb63a4f1b6365ec4ec/src/vs/editor/browser/editorExtensions.ts#L611
-         *
-         *
-         * Finally, `acceptSelectedSuggestion` appears here:
-         * - `editorExtensions.js` Line 288
-         */
-        editor.trigger('', 'acceptSelectedSuggestion')
+        if (editor._contentWidgets["editor.widget.suggestWidget"].widget.state !== 3) {
+          this.onEnter(editor.getValue());
+        } else {
+          /**
+           * Origin purpose: disable line breaks
+           * Side Effect: If defining completions, will prevent `Enter` confirm selection
+           * Side Effect Solution: always accept selected suggestion when `Enter`
+           *
+           * But it is hard to find out the name `acceptSelectedSuggestion` to trigger.
+           *
+           * Where to find the `acceptSelectedSuggestion` at monaco official documents ?
+           * Below is some refs:
+           * - https://stackoverflow.com/questions/64430041/get-a-list-of-monaco-commands-actions-ids
+           * - command from: https://github.com/microsoft/vscode/blob/e216a598d3e02401f26459fb63a4f1b6365ec4ec/src/vs/editor/contrib/suggest/suggestController.ts#L632-L638
+           * - https://github.com/microsoft/vscode/search?q=registerEditorCommand
+           * - real list: https://github.com/microsoft/vscode/blob/e216a598d3e02401f26459fb63a4f1b6365ec4ec/src/vs/editor/browser/editorExtensions.ts#L611
+           *
+           *
+           * Finally, `acceptSelectedSuggestion` appears here:
+           * - `editorExtensions.js` Line 288
+           */
+          editor.trigger('', 'acceptSelectedSuggestion')
+        }
       })
 
       // deal with user paste
