@@ -157,8 +157,13 @@ export default {
 
       // disable press `Enter` in case of producing line breaks
       editor.addCommand(monaco.KeyCode.Enter, () => {
-        if (editor._contentWidgets["editor.widget.suggestWidget"].widget.state !== 3) {
-          this.onEnter(editor.getValue());
+        // State: https://github.com/microsoft/vscode/blob/1.56.0/src/vs/editor/contrib/suggest/suggestWidget.ts#L50
+        const StateOpen = 3
+        if (
+          editor._contentWidgets['editor.widget.suggestWidget'].widget.state !==
+          StateOpen
+        ) {
+          this.onEnter(editor.getValue())
         } else {
           /**
            * Origin purpose: disable line breaks
